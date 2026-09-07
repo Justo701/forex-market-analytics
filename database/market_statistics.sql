@@ -46,3 +46,68 @@ SELECT
 
 FROM price_changes
 GROUP BY pair;
+-- Average daily percentage change
+WITH price_changes AS (
+    SELECT
+        trade_date,
+        pair,
+        close_price,
+
+        LAG(close_price) OVER (
+            ORDER BY trade_date
+        ) AS previous_close
+
+    FROM forex_prices
+)
+
+SELECT
+    pair,
+
+    ROUND(
+        AVG(
+            (
+                (close_price - previous_close)
+                / previous_close
+            ) * 100
+        ),
+        5
+    ) AS average_daily_percentage_change
+
+FROM price_changes
+
+GROUP BY pair;
+
+
+-- Average daily movement magnitude
+WITH price_changes AS (
+    SELECT
+        trade_date,
+        pair,
+        close_price,
+
+        LAG(close_price) OVER (
+            ORDER BY trade_date
+        ) AS previous_close
+
+    FROM forex_prices
+)
+
+SELECT
+    pair,
+
+    ROUND(
+        AVG(
+            ABS(
+                (
+                    (close_price - previous_close)
+                    / previous_close
+                ) * 100
+            )
+        ),
+        5
+    ) AS average_daily_movement
+
+FROM price_changes
+
+GROUP BY pair;
+
