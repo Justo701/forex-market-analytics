@@ -1,63 +1,68 @@
 USE forex_market_analytics;
 
-WITH moving_averages AS (
+WITH price_analysis AS (
+
     SELECT
         trade_date,
         pair,
         close_price,
 
-        AVG(close_price) OVER (
+        LAG(close_price) OVER (
             ORDER BY trade_date
-            ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
-        ) AS ma_3,
-
-        AVG(close_price) OVER (
-            ORDER BY trade_date
-            ROWS BETWEEN 4 PRECEDING AND CURRENT ROW
-        ) AS ma_5
+        ) AS previous_close
 
     FROM forex_prices
 ),
 
-with_previous AS (
+movement_analysis AS (
+
     SELECT
         trade_date,
         pair,
         close_price,
-        ma_3,
-        ma_5,
+        previous_close,
 
-        LAG(ma_3) OVER (
-            ORDER BY trade_date
-        ) AS previous_ma_3,
+        close_price - previous_close AS price_change,
 
-        LAG(ma_5) OVER (
-            ORDER BY trade_date
-        ) AS previous_ma_5
+        (
+            (close_price - previous_close)
+            / previous_close
+        ) * 100 AS percentage_change,
 
-    FROM moving_averages
+        ABS(
+            (
+                (close_price - previous_close)
+                / previous_close
+            ) * 100
+        ) AS absolute_percentage_change
+
+    FROM price_analysis
 )
 
 SELECT
     trade_date,
     pair,
     close_price,
-    ROUND(ma_3, 5) AS ma_3,
-    ROUND(ma_5, 5) AS ma_5,
-    ROUND(previous_ma_3, 5) AS previous_ma_3,
-    ROUND(previous_ma_5, 5) AS previous_ma_5,
+
+    ROUND(previous_close, 5) AS previous_close,
+
+    ROUND(price_change, 5) AS price_change,
+
+    ROUND(percentage_change, 5) AS percentage_change,
+
+    ROUND(absolute_percentage_change, 5)
+        AS absolute_percentage_change,
 
     CASE
-        WHEN previous_ma_3 <= previous_ma_5
-             AND ma_3 > ma_5
-            THEN 'Bullish Crossover'
+        WHEN absolute_percentage_change < 0.10
+            THEN 'Low Movement'
 
-        WHEN previous_ma_3 >= previous_ma_5
-             AND ma_3 < ma_5
-            THEN 'Bearish Crossover'
+        WHEN absolute_percentage_change <= 0.30
+            THEN 'Moderate Movement'
 
-        ELSE 'No Crossover'
-    END AS crossover_signal
+        ELSE 'High Movement'
+    END AS movement_class
 
-FROM with_previous
+FROM movement_analysis
+
 ORDER BY trade_date;
