@@ -5,14 +5,7 @@ This module is responsible for retrieving
 market statistics from MariaDB.
 """
 
-import mariadb
-import os
-
-from dotenv import load_dotenv
-
-
-# Load variables from the .env file.
-load_dotenv()
+from backend.config.database import get_db_connection
 
 
 def get_market_statistics():
@@ -29,13 +22,7 @@ def get_market_statistics():
     try:
 
         # Connect to MariaDB using values from .env.
-        connection = mariadb.connect(
-            host=os.getenv("DB_HOST"),
-            port=int(os.getenv("DB_PORT")),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME")
-        )
+        connection = get_db_connection()
 
         cursor = connection.cursor()
 

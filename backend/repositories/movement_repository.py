@@ -5,7 +5,7 @@ This module retrieves Forex price movement analysis
 from the MariaDB database.
 """
 
-import mariadb
+from backend.config.database import get_db_connection
 
 
 # ============================================================
@@ -41,15 +41,7 @@ def get_movements():
         # CONNECT TO MARIA DB
         # ----------------------------------------------------
 
-        connection = mariadb.connect(
-            host="127.0.0.1",
-            port=3306,
-            user="root",
-            password="",
-            database="forex_market_analytics"
-        )
-
-
+        connection =  get_db_connection()
         # ----------------------------------------------------
         # CREATE CURSOR
         # ----------------------------------------------------
