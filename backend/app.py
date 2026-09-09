@@ -2,34 +2,37 @@
 Forex Market Analytics API.
 
 A Flask-based backend application that provides API endpoints
-for application status, Forex prices, and price movement analysis.
+for application status, Forex prices, price movement analysis,
+and market statistics.
 """
+
+
+# ============================================================
+# IMPORTS
+# ============================================================
 
 from flask import Flask, jsonify
 import mariadb
 
-
-# ============================================================
-# IMPORT APPLICATION COMPONENTS
-# ============================================================
-
-# Price repository
+# Price service
 #
-# Responsible for retrieving Forex price data
-# from MariaDB.
+# Responsible for retrieving and preparing
+# Forex price data.
 from backend.services.price_service import get_price_data
 
 # Movement service
 #
 # Responsible for retrieving and preparing
 # Forex movement analysis.
-#
-# The service internally communicates with:
-#
-#     movement_repository.py
-#
-# We therefore do NOT import the movement repository directly here.
 from backend.services.movement_service import get_movement_analysis
+
+# Market statistics service
+#
+# Responsible for retrieving and preparing
+# Forex market statistics.
+from backend.services.statistics_service import (
+    get_market_statistics_data
+)
 
 
 # ============================================================
@@ -94,6 +97,7 @@ def prices():
             "message": str(error)
         }), 500
 
+
 # ============================================================
 # ROUTE 4: PRICE MOVEMENTS
 # ============================================================
@@ -138,6 +142,57 @@ def movements():
 
         return jsonify(movement_data)
 
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+
+
+# ============================================================
+# ROUTE 5: MARKET STATISTICS
+# ============================================================
+
+@app.route("/api/statistics")
+def statistics():
+    """
+    Retrieve Forex market statistics
+    and return them as JSON.
+
+    Flow:
+
+        Client
+          ↓
+        Flask route
+          ↓
+        Statistics service
+          ↓
+        Statistics repository
+          ↓
+        MariaDB
+          ↓
+        Market statistics
+          ↓
+        JSON response
+    """
+
+    try:
+
+        # ----------------------------------------------------
+        # GET MARKET STATISTICS FROM THE SERVICE
+        # ----------------------------------------------------
+
+        # The service retrieves the statistics from
+        # the repository and prepares the data.
+        statistics_data = get_market_statistics_data()
+
+
+        # ----------------------------------------------------
+        # RETURN JSON RESPONSE
+        # ----------------------------------------------------
+
+        return jsonify(statistics_data)
 
     except mariadb.Error as error:
 
