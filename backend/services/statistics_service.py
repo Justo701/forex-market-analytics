@@ -30,13 +30,12 @@ def get_market_statistics_data():
     for row in rows:
 
         statistics = {
-            "pair": row[0],
-            "average_price": float(row[1]),
-            "highest_price": float(row[2]),
-            "lowest_price": float(row[3]),
-            "total_records": row[4]
-        }
-
+    "pair": row["pair"],
+    "average_price": float(row["average_price"]),
+    "highest_price": float(row["highest_price"]),
+    "lowest_price": float(row["lowest_price"]),
+    "total_records": row["total_records"]
+}
         # Add the prepared dictionary to our list.
         statistics_data.append(statistics)
 

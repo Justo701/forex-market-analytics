@@ -42,39 +42,36 @@ def get_movement_analysis():
     for row in rows:
 
         movement = {
-            "trade_date": row[0].isoformat(),
+    "trade_date": row["trade_date"].isoformat(),
+    "pair": row["pair"],
+    "close_price": float(row["close_price"]),
 
-            "pair": row[1],
+    "previous_close": (
+        float(row["previous_close"])
+        if row["previous_close"] is not None
+        else None
+    ),
 
-            "close_price": float(row[2]),
+    "price_change": (
+        float(row["price_change"])
+        if row["price_change"] is not None
+        else None
+    ),
 
-            "previous_close": (
-                float(row[3])
-                if row[3] is not None
-                else None
-            ),
+    "percentage_change": (
+        float(row["percentage_change"])
+        if row["percentage_change"] is not None
+        else None
+    ),
 
-            "price_change": (
-                float(row[4])
-                if row[4] is not None
-                else None
-            ),
+    "absolute_percentage_change": (
+        float(row["absolute_percentage_change"])
+        if row["absolute_percentage_change"] is not None
+        else None
+    ),
 
-            "percentage_change": (
-                float(row[5])
-                if row[5] is not None
-                else None
-            ),
-
-            "absolute_percentage_change": (
-                float(row[6])
-                if row[6] is not None
-                else None
-            ),
-
-            "movement_class": row[7]
-        }
-
+    "movement_class": row["movement_class"]
+}
         movement_data.append(movement)
 
 

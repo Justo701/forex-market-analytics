@@ -41,10 +41,10 @@ def get_price_data():
     for row in rows:
 
         price = {
-            "trade_date": row[0].isoformat(),
-            "pair": row[1],
-            "close_price": float(row[2])
-        }
+    "trade_date": row["trade_date"].isoformat(),
+    "pair": row["pair"],
+    "close_price": float(row["close_price"])
+}
 
         price_data.append(price)
 

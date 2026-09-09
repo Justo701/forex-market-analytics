@@ -46,7 +46,7 @@ def get_movements():
         # CREATE CURSOR
         # ----------------------------------------------------
 
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary = True)
 
 
         # ----------------------------------------------------
