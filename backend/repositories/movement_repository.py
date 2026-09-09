@@ -41,12 +41,12 @@ def get_movements():
         # CONNECT TO MARIA DB
         # ----------------------------------------------------
 
-        connection =  get_db_connection()
+        connection = get_db_connection()
         # ----------------------------------------------------
         # CREATE CURSOR
         # ----------------------------------------------------
 
-        cursor = connection.cursor(dictionary = True)
+        cursor = connection.cursor(dictionary=True)
 
 
         # ----------------------------------------------------

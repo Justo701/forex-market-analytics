@@ -38,7 +38,7 @@ def get_all_prices():
         # CREATE DATABASE CURSOR
         # ----------------------------------------------------
 
-        cursor = connection.cursor(dictionary = True)
+        cursor = connection.cursor(dictionary=True)
 
         # ----------------------------------------------------
         # EXECUTE SQL QUERY

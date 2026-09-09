@@ -24,7 +24,7 @@ def get_market_statistics():
         # Connect to MariaDB using values from .env.
         connection = get_db_connection()
 
-        cursor = connection.cursor(dictionary = True)
+        cursor = connection.cursor(dictionary=True)
 
         # Execute the market statistics query.
         cursor.execute("""
