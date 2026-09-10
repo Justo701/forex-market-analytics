@@ -39,6 +39,9 @@ from backend.services.crossover_service import (
 from backend.services.support_resistance_service import (
     get_support_resistance_data
 )
+from backend.services.trend_analysis_service import (
+    get_trend_analysis_data
+)
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -275,6 +278,30 @@ def support_resistance_analysis():
             "error": "Database error",
             "message": str(error)
         }), 500
+# ============================================================
+# ROUTE 8: TREND ANALYSIS
+# ============================================================
+
+@app.route("/api/trends", methods=["GET"])
+def trend_analysis():
+    """
+    Retrieve Forex trend analysis
+    and return it as JSON.
+    """
+
+    try:
+
+        trend_data = get_trend_analysis_data()
+
+        return jsonify(trend_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
