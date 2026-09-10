@@ -54,6 +54,9 @@ from backend.services.advanced_volatility_service import (
 from backend.services.risk_classification_service import (
     get_risk_classification_data
 )
+from backend.services.multi_pair_comparison_service import (
+    get_multi_pair_comparison_data
+)
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -400,7 +403,24 @@ def risk_classification():
             "error": "Database error",
             "message": str(error)
         }), 500
+# ============================================================
+# MULTI-PAIR COMPARISON ENDPOINT
+# ============================================================
 
+@app.route("/api/multi-pair-comparison")
+def multi_pair_comparison():
+
+    try:
+        data = get_multi_pair_comparison_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
