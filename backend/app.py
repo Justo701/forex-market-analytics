@@ -33,7 +33,9 @@ from backend.services.movement_service import get_movement_analysis
 from backend.services.statistics_service import (
     get_market_statistics_data
 )
-
+from backend.services.crossover_service import (
+    get_crossover_analysis_data
+)
 
 # ============================================================
 # CREATE THE FLASK APPLICATION
@@ -200,7 +202,54 @@ def statistics():
             "error": "Database error",
             "message": str(error)
         }), 500
+# ============================================================
+# ROUTE 6: MOVING-AVERAGE CROSSOVERS
+# ============================================================
 
+@app.route("/api/crossovers", methods=["GET"])
+def crossover_analysis():
+    """
+    Retrieve moving-average crossover analysis
+    and return it as JSON.
+
+    Flow:
+
+        Client
+          ↓
+        Flask route
+          ↓
+        Crossover service
+          ↓
+        Crossover repository
+          ↓
+        MariaDB
+          ↓
+        Crossover analysis
+          ↓
+        JSON response
+    """
+
+    try:
+
+        # ----------------------------------------------------
+        # GET CROSSOVER ANALYSIS FROM THE SERVICE
+        # ----------------------------------------------------
+
+        crossover_data = get_crossover_analysis_data()
+
+
+        # ----------------------------------------------------
+        # RETURN JSON RESPONSE
+        # ----------------------------------------------------
+
+        return jsonify(crossover_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
 
 # ============================================================
 # START DEVELOPMENT SERVER
