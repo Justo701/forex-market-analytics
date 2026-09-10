@@ -51,7 +51,9 @@ from backend.services.trading_range_service import (
 from backend.services.advanced_volatility_service import (
     get_advanced_volatility_data
 )
-
+from backend.services.risk_classification_service import (
+    get_risk_classification_data
+)
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -379,7 +381,26 @@ def advanced_volatility():
         return jsonify({
             "error": "Database error",
             "message": str(error)
-        }), 500       
+        }), 500  
+ # ============================================================
+# RISK CLASSIFICATION ENDPOINT
+# ============================================================
+
+@app.route("/api/risk-classification")
+def risk_classification():
+
+    try:
+        data = get_risk_classification_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
