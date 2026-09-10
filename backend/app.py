@@ -36,7 +36,9 @@ from backend.services.statistics_service import (
 from backend.services.crossover_service import (
     get_crossover_analysis_data
 )
-
+from backend.services.support_resistance_service import (
+    get_support_resistance_data
+)
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -250,7 +252,29 @@ def crossover_analysis():
             "error": "Database error",
             "message": str(error)
         }), 500
+# ============================================================
+# ROUTE 7: SUPPORT AND RESISTANCE
+# ============================================================
 
+@app.route("/api/support-resistance", methods=["GET"])
+def support_resistance_analysis():
+    """
+    Retrieve support and resistance analysis
+    and return it as JSON.
+    """
+
+    try:
+
+        support_resistance_data = get_support_resistance_data()
+
+        return jsonify(support_resistance_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
