@@ -45,6 +45,9 @@ from backend.services.trend_analysis_service import (
 from backend.services.price_momentum_service import (
     get_price_momentum_data
 )
+from backend.services.trading_range_service import (
+    get_trading_range_data
+)
 
 # ============================================================
 # CREATE THE FLASK APPLICATION
@@ -328,6 +331,29 @@ def price_momentum():
             "error": "Database error",
             "message": str(error)
         }), 500
+ # ============================================================
+# ROUTE 10: TRADING RANGE
+# ============================================================
+
+@app.route("/api/trading-range", methods=["GET"])
+def trading_range():
+    """
+    Retrieve Forex trading range
+    and return it as JSON.
+    """
+
+    try:
+
+        trading_range_data = get_trading_range_data()
+
+        return jsonify(trading_range_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500       
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
