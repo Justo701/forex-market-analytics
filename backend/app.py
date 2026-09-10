@@ -42,6 +42,10 @@ from backend.services.support_resistance_service import (
 from backend.services.trend_analysis_service import (
     get_trend_analysis_data
 )
+from backend.services.price_momentum_service import (
+    get_price_momentum_data
+)
+
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -301,7 +305,29 @@ def trend_analysis():
             "error": "Database error",
             "message": str(error)
         }), 500
+# ============================================================
+# ROUTE 9: PRICE MOMENTUM
+# ============================================================
 
+@app.route("/api/momentum", methods=["GET"])
+def price_momentum():
+    """
+    Retrieve Forex price momentum
+    and return it as JSON.
+    """
+
+    try:
+
+        momentum_data = get_price_momentum_data()
+
+        return jsonify(momentum_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
