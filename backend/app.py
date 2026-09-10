@@ -48,6 +48,9 @@ from backend.services.price_momentum_service import (
 from backend.services.trading_range_service import (
     get_trading_range_data
 )
+from backend.services.advanced_volatility_service import (
+    get_advanced_volatility_data
+)
 
 # ============================================================
 # CREATE THE FLASK APPLICATION
@@ -347,6 +350,29 @@ def trading_range():
         trading_range_data = get_trading_range_data()
 
         return jsonify(trading_range_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500   
+ # ============================================================
+# ROUTE 11: ADVANCED VOLATILITY
+# ============================================================
+
+@app.route("/api/advanced-volatility", methods=["GET"])
+def advanced_volatility():
+    """
+    Retrieve advanced Forex volatility
+    and return it as JSON.
+    """
+
+    try:
+
+        volatility_data = get_advanced_volatility_data()
+
+        return jsonify(volatility_data)
 
     except mariadb.Error as error:
 
