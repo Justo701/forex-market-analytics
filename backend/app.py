@@ -62,6 +62,9 @@ from backend.services.rsi_service import get_rsi_data
 from backend.services.macd_service import get_macd_data
 from backend.services.bollinger_bands_service import get_bollinger_bands_data
 from backend.services.atr_service import get_atr_data
+from backend.services.indicator_combinations_service import (
+    get_indicator_combinations_data
+)
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -507,6 +510,24 @@ def atr():
 
     try:
         data = get_atr_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+# ============================================================
+# INDICATOR COMBINATIONS ENDPOINT
+# ============================================================
+
+@app.route("/api/indicator-combinations")
+def indicator_combinations():
+
+    try:
+        data = get_indicator_combinations_data()
 
         return jsonify(data)
 
