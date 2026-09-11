@@ -57,6 +57,7 @@ from backend.services.risk_classification_service import (
 from backend.services.multi_pair_comparison_service import (
     get_multi_pair_comparison_data
 )
+from backend.services.sma_ema_service import get_sma_ema_data
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -412,6 +413,24 @@ def multi_pair_comparison():
 
     try:
         data = get_multi_pair_comparison_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+# ============================================================
+# SMA AND EMA ENDPOINT
+# ============================================================
+
+@app.route("/api/sma-ema")
+def sma_ema():
+
+    try:
+        data = get_sma_ema_data()
 
         return jsonify(data)
 
