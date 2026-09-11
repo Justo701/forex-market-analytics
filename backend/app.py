@@ -61,6 +61,7 @@ from backend.services.sma_ema_service import get_sma_ema_data
 from backend.services.rsi_service import get_rsi_data
 from backend.services.macd_service import get_macd_data
 from backend.services.bollinger_bands_service import get_bollinger_bands_data
+from backend.services.atr_service import get_atr_data
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -488,6 +489,24 @@ def bollinger_bands():
 
     try:
         data = get_bollinger_bands_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+# ============================================================
+# ATR ENDPOINT
+# ============================================================
+
+@app.route("/api/atr")
+def atr():
+
+    try:
+        data = get_atr_data()
 
         return jsonify(data)
 
