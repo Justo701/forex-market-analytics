@@ -58,6 +58,7 @@ from backend.services.multi_pair_comparison_service import (
     get_multi_pair_comparison_data
 )
 from backend.services.sma_ema_service import get_sma_ema_data
+from backend.services.rsi_service import get_rsi_data
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -440,6 +441,24 @@ def sma_ema():
             "error": "Database error",
             "message": str(error)
         }), 500
+# ============================================================
+# RSI ENDPOINT
+# ============================================================
+
+@app.route("/api/rsi")
+def rsi():
+
+    try:
+        data = get_rsi_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500        
 # ============================================================
 # START DEVELOPMENT SERVER
 # ============================================================
