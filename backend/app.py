@@ -60,6 +60,7 @@ from backend.services.multi_pair_comparison_service import (
 from backend.services.sma_ema_service import get_sma_ema_data
 from backend.services.rsi_service import get_rsi_data
 from backend.services.macd_service import get_macd_data
+from backend.services.bollinger_bands_service import get_bollinger_bands_data
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -469,6 +470,24 @@ def macd():
 
     try:
         data = get_macd_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+# ============================================================
+# BOLLINGER BANDS ENDPOINT
+# ============================================================
+
+@app.route("/api/bollinger-bands")
+def bollinger_bands():
+
+    try:
+        data = get_bollinger_bands_data()
 
         return jsonify(data)
 
