@@ -59,6 +59,7 @@ from backend.services.multi_pair_comparison_service import (
 )
 from backend.services.sma_ema_service import get_sma_ema_data
 from backend.services.rsi_service import get_rsi_data
+from backend.services.macd_service import get_macd_data
 # ============================================================
 # CREATE THE FLASK APPLICATION
 # ============================================================
@@ -450,6 +451,24 @@ def rsi():
 
     try:
         data = get_rsi_data()
+
+        return jsonify(data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+# ============================================================
+# MACD ENDPOINT
+# ============================================================
+
+@app.route("/api/macd")
+def macd():
+
+    try:
+        data = get_macd_data()
 
         return jsonify(data)
 
