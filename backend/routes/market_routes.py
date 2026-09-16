@@ -54,3 +54,72 @@ def movements():
             "error": "Database error",
             "message": str(error)
         }), 500
+from backend.services.crossover_service import get_crossover_analysis_data
+
+
+@market_bp.route("/api/crossovers", methods=["GET"])
+def crossover_analysis():
+    """
+    Retrieve moving-average crossover analysis
+    and return it as JSON.
+    """
+
+    try:
+        # Ask the service for crossover analysis.
+        crossover_data = get_crossover_analysis_data()
+
+        # Return the result as JSON.
+        return jsonify(crossover_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+from backend.services.support_resistance_service import get_support_resistance_data
+
+
+@market_bp.route("/api/support-resistance", methods=["GET"])
+def support_resistance_analysis():
+    """
+    Retrieve support and resistance analysis
+    and return it as JSON.
+    """
+
+    try:
+        # Ask the service for support and resistance analysis.
+        support_resistance_data = get_support_resistance_data()
+
+        # Return the result as JSON.
+        return jsonify(support_resistance_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+from backend.services.trend_analysis_service import get_trend_analysis_data
+
+
+@market_bp.route("/api/trends", methods=["GET"])
+def trend_analysis():
+    """
+    Retrieve Forex trend analysis
+    and return it as JSON.
+    """
+
+    try:
+        # Ask the service for trend analysis.
+        trend_data = get_trend_analysis_data()
+
+        # Return the result as JSON.
+        return jsonify(trend_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
