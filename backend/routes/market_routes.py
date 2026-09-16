@@ -1,4 +1,8 @@
 from flask import Blueprint, jsonify
+import mariadb
+
+from backend.services.price_service import get_price_data
+
 
 market_bp = Blueprint("market", __name__)
 
@@ -10,3 +14,24 @@ def status():
         "message": "API is operational",
         "status": "running"
     })
+
+
+@market_bp.route("/api/prices")
+def prices():
+    """
+    Return Forex price data as JSON.
+    """
+
+    try:
+        # Ask the service for prepared price data.
+        price_data = get_price_data()
+
+        # Return the data as JSON.
+        return jsonify(price_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500

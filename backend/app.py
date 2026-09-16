@@ -107,32 +107,6 @@ def create_app():
 
 
     # ============================================================
-    # ROUTE 3: FOREX PRICES
-    # ============================================================
-
-    @app.route("/api/prices")
-    def prices():
-        """
-        Return Forex price data as JSON.
-        """
-
-        try:
-
-            # Ask the service for prepared price data.
-            price_data = get_price_data()
-
-            # Return the data as JSON.
-            return jsonify(price_data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-
-
-    # ============================================================
     # ROUTE 4: PRICE MOVEMENTS
     # ============================================================
 
