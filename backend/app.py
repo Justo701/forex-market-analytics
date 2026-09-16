@@ -18,6 +18,7 @@ import mariadb
 #
 # Responsible for retrieving and preparing
 # Forex price data.
+from backend.routes.market_routes import market_bp
 from backend.services.price_service import get_price_data
 
 # Movement service
@@ -71,6 +72,8 @@ from backend.services.indicator_combinations_service import (
 
 def create_app():
     app = Flask(__name__)
+
+    app.register_blueprint(market_bp)
 
 
     # ============================================================
