@@ -1,84 +1,32 @@
 """
 Forex Market Analytics API.
 
-A Flask-based backend application that provides API endpoints
-for application status, Forex prices, price movement analysis,
-and market statistics.
+Flask application entry point.
+Routes are organized using Flask Blueprints.
 """
 
+from flask import Flask
 
-# ============================================================
-# IMPORTS
-# ============================================================
-
-from flask import Flask, jsonify
-import mariadb
-
-# Price service
-#
-# Responsible for retrieving and preparing
-# Forex price data.
 from backend.routes.market_routes import market_bp
-from backend.services.price_service import get_price_data
 
-# Movement service
-#
-# Responsible for retrieving and preparing
-# Forex movement analysis.
-from backend.services.movement_service import get_movement_analysis
 
-# Market statistics service
-#
-# Responsible for retrieving and preparing
-# Forex market statistics.
-from backend.services.statistics_service import (
-    get_market_statistics_data
-)
-from backend.services.crossover_service import (
-    get_crossover_analysis_data
-)
-from backend.services.support_resistance_service import (
-    get_support_resistance_data
-)
-from backend.services.trend_analysis_service import (
-    get_trend_analysis_data
-)
-from backend.services.price_momentum_service import (
-    get_price_momentum_data
-)
-from backend.services.trading_range_service import (
-    get_trading_range_data
-)
-from backend.services.advanced_volatility_service import (
-    get_advanced_volatility_data
-)
-from backend.services.risk_classification_service import (
-    get_risk_classification_data
-)
-from backend.services.multi_pair_comparison_service import (
-    get_multi_pair_comparison_data
-)
-from backend.services.sma_ema_service import get_sma_ema_data
-from backend.services.rsi_service import get_rsi_data
-from backend.services.macd_service import get_macd_data
-from backend.services.bollinger_bands_service import get_bollinger_bands_data
-from backend.services.atr_service import get_atr_data
-from backend.services.indicator_combinations_service import (
-    get_indicator_combinations_data
-)
 # ============================================================
-# CREATE THE FLASK APPLICATION
+# APPLICATION FACTORY
 # ============================================================
 
 def create_app():
+    """
+    Create and configure the Flask application.
+    """
+
     app = Flask(__name__)
 
+    # Register the market API routes.
     app.register_blueprint(market_bp)
 
-
-    # ============================================================
-    # ROUTE 1: HOME
-    # ============================================================
+    # ========================================================
+    # HOME ROUTE
+    # ========================================================
 
     @app.route("/")
     def home():
@@ -88,249 +36,13 @@ def create_app():
 
         return "Forex Market Analytics API"
 
-
-    # ============================================================
-    # ROUTE 2: API STATUS
-    # ============================================================
-
-    @app.route("/api/status")
-    def status():
-        """
-        Return the current API status.
-        """
-
-        return jsonify({
-            "application": "Forex Market Analytics",
-            "status": "running",
-            "message": "API is operational"
-        })
-    # ============================================================
-    # ROUTE 9: PRICE MOMENTUM
-    # ============================================================
-
-    @app.route("/api/momentum", methods=["GET"])
-    def price_momentum():
-        """
-        Retrieve Forex price momentum
-        and return it as JSON.
-        """
-
-        try:
-
-            momentum_data = get_price_momentum_data()
-
-            return jsonify(momentum_data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-     # ============================================================
-    # ROUTE 10: TRADING RANGE
-    # ============================================================
-
-    @app.route("/api/trading-range", methods=["GET"])
-    def trading_range():
-        """
-        Retrieve Forex trading range
-        and return it as JSON.
-        """
-
-        try:
-
-            trading_range_data = get_trading_range_data()
-
-            return jsonify(trading_range_data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500   
-     # ============================================================
-    # ROUTE 11: ADVANCED VOLATILITY
-    # ============================================================
-
-    @app.route("/api/advanced-volatility", methods=["GET"])
-    def advanced_volatility():
-        """
-        Retrieve advanced Forex volatility
-        and return it as JSON.
-        """
-
-        try:
-
-            volatility_data = get_advanced_volatility_data()
-
-            return jsonify(volatility_data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500  
-     # ============================================================
-    # RISK CLASSIFICATION ENDPOINT
-    # ============================================================
-
-    @app.route("/api/risk-classification")
-    def risk_classification():
-
-        try:
-            data = get_risk_classification_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # MULTI-PAIR COMPARISON ENDPOINT
-    # ============================================================
-
-    @app.route("/api/multi-pair-comparison")
-    def multi_pair_comparison():
-
-        try:
-            data = get_multi_pair_comparison_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # SMA AND EMA ENDPOINT
-    # ============================================================
-
-    @app.route("/api/sma-ema")
-    def sma_ema():
-
-        try:
-            data = get_sma_ema_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # RSI ENDPOINT
-    # ============================================================
-
-    @app.route("/api/rsi")
-    def rsi():
-
-        try:
-            data = get_rsi_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # MACD ENDPOINT
-    # ============================================================
-
-    @app.route("/api/macd")
-    def macd():
-
-        try:
-            data = get_macd_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # BOLLINGER BANDS ENDPOINT
-    # ============================================================
-
-    @app.route("/api/bollinger-bands")
-    def bollinger_bands():
-
-        try:
-            data = get_bollinger_bands_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # ATR ENDPOINT
-    # ============================================================
-
-    @app.route("/api/atr")
-    def atr():
-
-        try:
-            data = get_atr_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-    # ============================================================
-    # INDICATOR COMBINATIONS ENDPOINT
-    # ============================================================
-
-    @app.route("/api/indicator-combinations")
-    def indicator_combinations():
-
-        try:
-            data = get_indicator_combinations_data()
-
-            return jsonify(data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500        
-    # ============================================================
-    # START DEVELOPMENT SERVER
-    # ============================================================
-
     return app
 
-    # Start Flask's development server.
-    #
-    # debug=True allows Flask to automatically reload
-    # when we change the code during development.
-    #
-    # Do NOT use debug=True in production.
+
+# ============================================================
+# DEVELOPMENT SERVER
+# ============================================================
 
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
-    

@@ -2,9 +2,17 @@ from flask import Blueprint, jsonify
 import mariadb
 from backend.services.price_service import get_price_data
 from backend.services.movement_service import get_movement_analysis
-
+from backend.services.trading_range_service import get_trading_range_data
+from backend.services.advanced_volatility_service import get_advanced_volatility_data
+from backend.services.risk_classification_service import get_risk_classification_data
+from backend.services.multi_pair_comparison_service import get_multi_pair_comparison_data
+from backend.services.sma_ema_service import get_sma_ema_data
+from backend.services.rsi_service import get_rsi_data
+from backend.services.macd_service import get_macd_data
+from backend.services.bollinger_bands_service import get_bollinger_bands_data
+from backend.services.atr_service import get_atr_data
+from backend.services.indicator_combinations_service import get_indicator_combinations_data
 market_bp = Blueprint("market", __name__)
-
 
 @market_bp.route("/api/status")
 def status():
@@ -119,6 +127,127 @@ def trend_analysis():
 
     except mariadb.Error as error:
 
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+from backend.services.price_momentum_service import get_price_momentum_data
+
+
+@market_bp.route("/api/momentum", methods=["GET"])
+def price_momentum():
+    """
+    Retrieve Forex price momentum
+    and return it as JSON.
+    """
+
+    try:
+        # Ask the service for price momentum analysis.
+        momentum_data = get_price_momentum_data()
+
+        # Return the result as JSON.
+        return jsonify(momentum_data)
+
+    except mariadb.Error as error:
+
+        return jsonify({
+            "error": "Database error",
+            "message": str(error) }), 500
+@market_bp.route("/api/advanced-volatility", methods=["GET"])
+def advanced_volatility():
+    """
+    Retrieve advanced Forex volatility
+    and return it as JSON.
+    """
+    try:
+        volatility_data = get_advanced_volatility_data()
+        return jsonify(volatility_data)
+
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/risk-classification")
+def risk_classification():
+    try:
+        data = get_risk_classification_data()
+        return jsonify(data)
+
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/multi-pair-comparison")
+def multi_pair_comparison():
+    try:
+        data = get_multi_pair_comparison_data()
+        return jsonify(data)
+
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/sma-ema")
+def sma_ema():
+    try:
+        data = get_sma_ema_data()
+        return jsonify(data)
+
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/rsi")
+def rsi():
+    try:
+        data = get_rsi_data()
+        return jsonify(data)
+
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/macd")
+def macd():
+    try:
+        data = get_macd_data()
+        return jsonify(data)
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/bollinger-bands")
+def bollinger_bands():
+    try:
+        data = get_bollinger_bands_data()
+        return jsonify(data)
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/atr")
+def atr():
+    try:
+        data = get_atr_data()
+        return jsonify(data)
+    except mariadb.Error as error:
+        return jsonify({
+            "error": "Database error",
+            "message": str(error)
+        }), 500
+@market_bp.route("/api/indicator-combinations")
+def indicator_combinations():
+    try:
+        data = get_indicator_combinations_data()
+        return jsonify(data)
+    except mariadb.Error as error:
         return jsonify({
             "error": "Database error",
             "message": str(error)
