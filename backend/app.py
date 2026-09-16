@@ -157,57 +157,6 @@ def create_app():
                 "message": str(error)
             }), 500
 
-
-    # ============================================================
-    # ROUTE 5: MARKET STATISTICS
-    # ============================================================
-
-    @app.route("/api/statistics")
-    def statistics():
-        """
-        Retrieve Forex market statistics
-        and return them as JSON.
-
-        Flow:
-
-            Client
-              ↓
-            Flask route
-              ↓
-            Statistics service
-              ↓
-            Statistics repository
-              ↓
-            MariaDB
-              ↓
-            Market statistics
-              ↓
-            JSON response
-        """
-
-        try:
-
-            # ----------------------------------------------------
-            # GET MARKET STATISTICS FROM THE SERVICE
-            # ----------------------------------------------------
-
-            # The service retrieves the statistics from
-            # the repository and prepares the data.
-            statistics_data = get_market_statistics_data()
-
-
-            # ----------------------------------------------------
-            # RETURN JSON RESPONSE
-            # ----------------------------------------------------
-
-            return jsonify(statistics_data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
     # ============================================================
     # ROUTE 6: MOVING-AVERAGE CROSSOVERS
     # ============================================================
