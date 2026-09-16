@@ -69,479 +69,480 @@ from backend.services.indicator_combinations_service import (
 # CREATE THE FLASK APPLICATION
 # ============================================================
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
 
 
-# ============================================================
-# ROUTE 1: HOME
-# ============================================================
+    # ============================================================
+    # ROUTE 1: HOME
+    # ============================================================
 
-@app.route("/")
-def home():
-    """
-    Return the API welcome message.
-    """
+    @app.route("/")
+    def home():
+        """
+        Return the API welcome message.
+        """
 
-    return "Forex Market Analytics API"
-
-
-# ============================================================
-# ROUTE 2: API STATUS
-# ============================================================
-
-@app.route("/api/status")
-def status():
-    """
-    Return the current API status.
-    """
-
-    return jsonify({
-        "application": "Forex Market Analytics",
-        "status": "running",
-        "message": "API is operational"
-    })
+        return "Forex Market Analytics API"
 
 
-# ============================================================
-# ROUTE 3: FOREX PRICES
-# ============================================================
+    # ============================================================
+    # ROUTE 2: API STATUS
+    # ============================================================
 
-@app.route("/api/prices")
-def prices():
-    """
-    Return Forex price data as JSON.
-    """
-
-    try:
-
-        # Ask the service for prepared price data.
-        price_data = get_price_data()
-
-        # Return the data as JSON.
-        return jsonify(price_data)
-
-    except mariadb.Error as error:
+    @app.route("/api/status")
+    def status():
+        """
+        Return the current API status.
+        """
 
         return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
+            "application": "Forex Market Analytics",
+            "status": "running",
+            "message": "API is operational"
+        })
 
+
+    # ============================================================
+    # ROUTE 3: FOREX PRICES
+    # ============================================================
+
+    @app.route("/api/prices")
+    def prices():
+        """
+        Return Forex price data as JSON.
+        """
+
+        try:
+
+            # Ask the service for prepared price data.
+            price_data = get_price_data()
+
+            # Return the data as JSON.
+            return jsonify(price_data)
 
-# ============================================================
-# ROUTE 4: PRICE MOVEMENTS
-# ============================================================
-
-@app.route("/api/movements")
-def movements():
-    """
-    Retrieve Forex price movement analysis
-    and return it as JSON.
-
-    Flow:
-
-        Client
-          ↓
-        Flask route
-          ↓
-        Movement service
-          ↓
-        Movement repository
-          ↓
-        MariaDB
-          ↓
-        Movement analysis
-          ↓
-        JSON response
-    """
-
-    try:
-
-        # ----------------------------------------------------
-        # GET MOVEMENT ANALYSIS FROM THE SERVICE
-        # ----------------------------------------------------
-
-        # The service handles the application-level
-        # preparation of the movement data.
-        movement_data = get_movement_analysis()
-
-
-        # ----------------------------------------------------
-        # RETURN JSON RESPONSE
-        # ----------------------------------------------------
-
-        return jsonify(movement_data)
-
-    except mariadb.Error as error:
-
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-
-
-# ============================================================
-# ROUTE 5: MARKET STATISTICS
-# ============================================================
-
-@app.route("/api/statistics")
-def statistics():
-    """
-    Retrieve Forex market statistics
-    and return them as JSON.
-
-    Flow:
-
-        Client
-          ↓
-        Flask route
-          ↓
-        Statistics service
-          ↓
-        Statistics repository
-          ↓
-        MariaDB
-          ↓
-        Market statistics
-          ↓
-        JSON response
-    """
-
-    try:
-
-        # ----------------------------------------------------
-        # GET MARKET STATISTICS FROM THE SERVICE
-        # ----------------------------------------------------
-
-        # The service retrieves the statistics from
-        # the repository and prepares the data.
-        statistics_data = get_market_statistics_data()
-
-
-        # ----------------------------------------------------
-        # RETURN JSON RESPONSE
-        # ----------------------------------------------------
-
-        return jsonify(statistics_data)
-
-    except mariadb.Error as error:
-
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# ROUTE 6: MOVING-AVERAGE CROSSOVERS
-# ============================================================
-
-@app.route("/api/crossovers", methods=["GET"])
-def crossover_analysis():
-    """
-    Retrieve moving-average crossover analysis
-    and return it as JSON.
+        except mariadb.Error as error:
+
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
 
-    Flow:
 
-        Client
-          ↓
-        Flask route
-          ↓
-        Crossover service
-          ↓
-        Crossover repository
-          ↓
-        MariaDB
-          ↓
-        Crossover analysis
-          ↓
-        JSON response
-    """
-
-    try:
-
-        # ----------------------------------------------------
-        # GET CROSSOVER ANALYSIS FROM THE SERVICE
-        # ----------------------------------------------------
+    # ============================================================
+    # ROUTE 4: PRICE MOVEMENTS
+    # ============================================================
 
-        crossover_data = get_crossover_analysis_data()
+    @app.route("/api/movements")
+    def movements():
+        """
+        Retrieve Forex price movement analysis
+        and return it as JSON.
+
+        Flow:
+
+            Client
+              ↓
+            Flask route
+              ↓
+            Movement service
+              ↓
+            Movement repository
+              ↓
+            MariaDB
+              ↓
+            Movement analysis
+              ↓
+            JSON response
+        """
+
+        try:
+
+            # ----------------------------------------------------
+            # GET MOVEMENT ANALYSIS FROM THE SERVICE
+            # ----------------------------------------------------
+
+            # The service handles the application-level
+            # preparation of the movement data.
+            movement_data = get_movement_analysis()
+
+
+            # ----------------------------------------------------
+            # RETURN JSON RESPONSE
+            # ----------------------------------------------------
+
+            return jsonify(movement_data)
+
+        except mariadb.Error as error:
+
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+
+
+    # ============================================================
+    # ROUTE 5: MARKET STATISTICS
+    # ============================================================
+
+    @app.route("/api/statistics")
+    def statistics():
+        """
+        Retrieve Forex market statistics
+        and return them as JSON.
+
+        Flow:
+
+            Client
+              ↓
+            Flask route
+              ↓
+            Statistics service
+              ↓
+            Statistics repository
+              ↓
+            MariaDB
+              ↓
+            Market statistics
+              ↓
+            JSON response
+        """
+
+        try:
+
+            # ----------------------------------------------------
+            # GET MARKET STATISTICS FROM THE SERVICE
+            # ----------------------------------------------------
+
+            # The service retrieves the statistics from
+            # the repository and prepares the data.
+            statistics_data = get_market_statistics_data()
+
+
+            # ----------------------------------------------------
+            # RETURN JSON RESPONSE
+            # ----------------------------------------------------
+
+            return jsonify(statistics_data)
+
+        except mariadb.Error as error:
+
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # ROUTE 6: MOVING-AVERAGE CROSSOVERS
+    # ============================================================
+
+    @app.route("/api/crossovers", methods=["GET"])
+    def crossover_analysis():
+        """
+        Retrieve moving-average crossover analysis
+        and return it as JSON.
+
+        Flow:
+
+            Client
+              ↓
+            Flask route
+              ↓
+            Crossover service
+              ↓
+            Crossover repository
+              ↓
+            MariaDB
+              ↓
+            Crossover analysis
+              ↓
+            JSON response
+        """
+
+        try:
+
+            # ----------------------------------------------------
+            # GET CROSSOVER ANALYSIS FROM THE SERVICE
+            # ----------------------------------------------------
+
+            crossover_data = get_crossover_analysis_data()
 
+
+            # ----------------------------------------------------
+            # RETURN JSON RESPONSE
+            # ----------------------------------------------------
+
+            return jsonify(crossover_data)
+
+        except mariadb.Error as error:
+
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # ROUTE 7: SUPPORT AND RESISTANCE
+    # ============================================================
+
+    @app.route("/api/support-resistance", methods=["GET"])
+    def support_resistance_analysis():
+        """
+        Retrieve support and resistance analysis
+        and return it as JSON.
+        """
 
-        # ----------------------------------------------------
-        # RETURN JSON RESPONSE
-        # ----------------------------------------------------
+        try:
 
-        return jsonify(crossover_data)
+            support_resistance_data = get_support_resistance_data()
 
-    except mariadb.Error as error:
-
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# ROUTE 7: SUPPORT AND RESISTANCE
-# ============================================================
-
-@app.route("/api/support-resistance", methods=["GET"])
-def support_resistance_analysis():
-    """
-    Retrieve support and resistance analysis
-    and return it as JSON.
-    """
+            return jsonify(support_resistance_data)
+
+        except mariadb.Error as error:
+
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # ROUTE 8: TREND ANALYSIS
+    # ============================================================
 
-    try:
+    @app.route("/api/trends", methods=["GET"])
+    def trend_analysis():
+        """
+        Retrieve Forex trend analysis
+        and return it as JSON.
+        """
 
-        support_resistance_data = get_support_resistance_data()
+        try:
+
+            trend_data = get_trend_analysis_data()
 
-        return jsonify(support_resistance_data)
+            return jsonify(trend_data)
+
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
-
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# ROUTE 8: TREND ANALYSIS
-# ============================================================
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # ROUTE 9: PRICE MOMENTUM
+    # ============================================================
 
-@app.route("/api/trends", methods=["GET"])
-def trend_analysis():
-    """
-    Retrieve Forex trend analysis
-    and return it as JSON.
-    """
+    @app.route("/api/momentum", methods=["GET"])
+    def price_momentum():
+        """
+        Retrieve Forex price momentum
+        and return it as JSON.
+        """
 
-    try:
+        try:
 
-        trend_data = get_trend_analysis_data()
+            momentum_data = get_price_momentum_data()
 
-        return jsonify(trend_data)
+            return jsonify(momentum_data)
 
-    except mariadb.Error as error:
+        except mariadb.Error as error:
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# ROUTE 9: PRICE MOMENTUM
-# ============================================================
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+     # ============================================================
+    # ROUTE 10: TRADING RANGE
+    # ============================================================
 
-@app.route("/api/momentum", methods=["GET"])
-def price_momentum():
-    """
-    Retrieve Forex price momentum
-    and return it as JSON.
-    """
+    @app.route("/api/trading-range", methods=["GET"])
+    def trading_range():
+        """
+        Retrieve Forex trading range
+        and return it as JSON.
+        """
 
-    try:
+        try:
 
-        momentum_data = get_price_momentum_data()
+            trading_range_data = get_trading_range_data()
 
-        return jsonify(momentum_data)
+            return jsonify(trading_range_data)
 
-    except mariadb.Error as error:
+        except mariadb.Error as error:
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
- # ============================================================
-# ROUTE 10: TRADING RANGE
-# ============================================================
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500   
+     # ============================================================
+    # ROUTE 11: ADVANCED VOLATILITY
+    # ============================================================
 
-@app.route("/api/trading-range", methods=["GET"])
-def trading_range():
-    """
-    Retrieve Forex trading range
-    and return it as JSON.
-    """
+    @app.route("/api/advanced-volatility", methods=["GET"])
+    def advanced_volatility():
+        """
+        Retrieve advanced Forex volatility
+        and return it as JSON.
+        """
 
-    try:
+        try:
 
-        trading_range_data = get_trading_range_data()
+            volatility_data = get_advanced_volatility_data()
 
-        return jsonify(trading_range_data)
+            return jsonify(volatility_data)
 
-    except mariadb.Error as error:
+        except mariadb.Error as error:
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500   
- # ============================================================
-# ROUTE 11: ADVANCED VOLATILITY
-# ============================================================
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500  
+     # ============================================================
+    # RISK CLASSIFICATION ENDPOINT
+    # ============================================================
 
-@app.route("/api/advanced-volatility", methods=["GET"])
-def advanced_volatility():
-    """
-    Retrieve advanced Forex volatility
-    and return it as JSON.
-    """
+    @app.route("/api/risk-classification")
+    def risk_classification():
 
-    try:
+        try:
+            data = get_risk_classification_data()
 
-        volatility_data = get_advanced_volatility_data()
+            return jsonify(data)
 
-        return jsonify(volatility_data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # MULTI-PAIR COMPARISON ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500  
- # ============================================================
-# RISK CLASSIFICATION ENDPOINT
-# ============================================================
+    @app.route("/api/multi-pair-comparison")
+    def multi_pair_comparison():
 
-@app.route("/api/risk-classification")
-def risk_classification():
+        try:
+            data = get_multi_pair_comparison_data()
 
-    try:
-        data = get_risk_classification_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # SMA AND EMA ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# MULTI-PAIR COMPARISON ENDPOINT
-# ============================================================
+    @app.route("/api/sma-ema")
+    def sma_ema():
 
-@app.route("/api/multi-pair-comparison")
-def multi_pair_comparison():
+        try:
+            data = get_sma_ema_data()
 
-    try:
-        data = get_multi_pair_comparison_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # RSI ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# SMA AND EMA ENDPOINT
-# ============================================================
+    @app.route("/api/rsi")
+    def rsi():
 
-@app.route("/api/sma-ema")
-def sma_ema():
+        try:
+            data = get_rsi_data()
 
-    try:
-        data = get_sma_ema_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # MACD ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# RSI ENDPOINT
-# ============================================================
+    @app.route("/api/macd")
+    def macd():
 
-@app.route("/api/rsi")
-def rsi():
+        try:
+            data = get_macd_data()
 
-    try:
-        data = get_rsi_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # BOLLINGER BANDS ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# MACD ENDPOINT
-# ============================================================
+    @app.route("/api/bollinger-bands")
+    def bollinger_bands():
 
-@app.route("/api/macd")
-def macd():
+        try:
+            data = get_bollinger_bands_data()
 
-    try:
-        data = get_macd_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # ATR ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# BOLLINGER BANDS ENDPOINT
-# ============================================================
+    @app.route("/api/atr")
+    def atr():
 
-@app.route("/api/bollinger-bands")
-def bollinger_bands():
+        try:
+            data = get_atr_data()
 
-    try:
-        data = get_bollinger_bands_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500
+    # ============================================================
+    # INDICATOR COMBINATIONS ENDPOINT
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# ATR ENDPOINT
-# ============================================================
+    @app.route("/api/indicator-combinations")
+    def indicator_combinations():
 
-@app.route("/api/atr")
-def atr():
+        try:
+            data = get_indicator_combinations_data()
 
-    try:
-        data = get_atr_data()
+            return jsonify(data)
 
-        return jsonify(data)
+        except mariadb.Error as error:
 
-    except mariadb.Error as error:
+            return jsonify({
+                "error": "Database error",
+                "message": str(error)
+            }), 500        
+    # ============================================================
+    # START DEVELOPMENT SERVER
+    # ============================================================
 
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500
-# ============================================================
-# INDICATOR COMBINATIONS ENDPOINT
-# ============================================================
-
-@app.route("/api/indicator-combinations")
-def indicator_combinations():
-
-    try:
-        data = get_indicator_combinations_data()
-
-        return jsonify(data)
-
-    except mariadb.Error as error:
-
-        return jsonify({
-            "error": "Database error",
-            "message": str(error)
-        }), 500        
-# ============================================================
-# START DEVELOPMENT SERVER
-# ============================================================
-
-if __name__ == "__main__":
+    return app
 
     # Start Flask's development server.
     #
@@ -549,4 +550,8 @@ if __name__ == "__main__":
     # when we change the code during development.
     #
     # Do NOT use debug=True in production.
+
+if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True)
+    
