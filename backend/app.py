@@ -107,57 +107,6 @@ def create_app():
 
 
     # ============================================================
-    # ROUTE 4: PRICE MOVEMENTS
-    # ============================================================
-
-    @app.route("/api/movements")
-    def movements():
-        """
-        Retrieve Forex price movement analysis
-        and return it as JSON.
-
-        Flow:
-
-            Client
-              ↓
-            Flask route
-              ↓
-            Movement service
-              ↓
-            Movement repository
-              ↓
-            MariaDB
-              ↓
-            Movement analysis
-              ↓
-            JSON response
-        """
-
-        try:
-
-            # ----------------------------------------------------
-            # GET MOVEMENT ANALYSIS FROM THE SERVICE
-            # ----------------------------------------------------
-
-            # The service handles the application-level
-            # preparation of the movement data.
-            movement_data = get_movement_analysis()
-
-
-            # ----------------------------------------------------
-            # RETURN JSON RESPONSE
-            # ----------------------------------------------------
-
-            return jsonify(movement_data)
-
-        except mariadb.Error as error:
-
-            return jsonify({
-                "error": "Database error",
-                "message": str(error)
-            }), 500
-
-    # ============================================================
     # ROUTE 6: MOVING-AVERAGE CROSSOVERS
     # ============================================================
 
