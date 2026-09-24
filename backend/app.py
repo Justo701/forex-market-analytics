@@ -4,11 +4,12 @@ Forex Market Analytics API.
 Flask application entry point.
 Routes are organized using Flask Blueprints.
 """
-
+from flask_cors import CORS
 from flask import Flask
 
 from backend.routes.market_routes import market_bp
-
+import mariadb
+from backend.errors.handlers import handle_database_error
 
 # ============================================================
 # APPLICATION FACTORY
@@ -20,6 +21,8 @@ def create_app():
     """
 
     app = Flask(__name__)
+    CORS(app)
+    app.register_error_handler(mariadb.Error, handle_database_error)
 
     # Register the market API routes.
     app.register_blueprint(market_bp)
