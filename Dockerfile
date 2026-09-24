@@ -1,9 +1,9 @@
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y libmariadb-dev && \
+    apt-get install -y libmariadb-dev gcc pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
