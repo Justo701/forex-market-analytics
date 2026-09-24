@@ -4,7 +4,7 @@ function App() {
   const [prices, setPrices] = useState([])
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/prices")
+    fetch(`${import.meta.env.VITE_API_URL}/api/prices`)
       .then(response => response.json())
       .then(data => setPrices(data))
   }, [])
